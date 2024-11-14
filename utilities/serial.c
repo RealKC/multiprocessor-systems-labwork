@@ -1,45 +1,39 @@
 #include "xil_types.h"
-#include "xparameters.h"
 
-#define TX_ADDR (XPAR_UARTLITE_0_BASEADDR + 0x04)
-#define STATUS_REG (XPAR_UARTLITE_0_BASEADDR + 0x08)
-#define RX_ADDR (XPAR_UARTLITE_0_BASEADDR)
+u32 UartGetStatus(u32 uartBaseAddr)
+{
+    return *(u32 volatile)(uartBaseAddr + 0x08);
+}
 
-#define ACCESS(type, addr) (*(volatile type*)(addr))
-
-void write_serial(u8 const* data, u16 len)
+void UartTransmitBlocking(u32 uartBaseAddr, u8 const* srcDataPtr, u32 dataLen)
 {
     u16 i;
 
-    for (i = 0; i < len; ++i) {
-        while (ACCESS(u32, STATUS_REG) & (0x1 << 3)) {
-            ; // block to wait for queue to empty
+    u8 volatile* tx = (u8 volatile*)(uartBaseAddr + 0x04);
+
+    for (i = 0; i < dataLen; ++i) {
+        while (!(UartGetStatus(uartBaseAddr) & (0x1 << 4))) {
+            ; // block to wait for space in the queue
         }
 
-        ACCESS(u8, TX_ADDR) = data[i];
+        *tx = srcDataPtr[i];
     }
 }
 
-u16 read_serial(u8* read_buf, u8 terminator)
+u16 UartReceiveBlocking(u32 uartBaseAddr, u8* destDataPtr, u32 dataLen)
 {
     u16 i = 0;
-    u8 recv;
+    u8 volatile* rx = (u8 volatile*)(uartBaseAddr + 0x00);
 
-    while (1) {
+    while (i < dataLen) {
         // maybe check parity and frame errors?
 
-        while (!(ACCESS(u32, STATUS_REG) & 0x1)) {
-            ; // block to wait for receiving a character
+        while (!(UartGetStatus(uartBaseAddr) & 0x1)) {
+            ; // block to wait for a character
         }
 
-        recv = ACCESS(u8, RX_ADDR);
-
-        read_buf[i] = recv;
+        read_buf[i] = *rx;
         i++;
-
-        if (recv == terminator) {
-            break;
-        }
     }
 
     return i;
