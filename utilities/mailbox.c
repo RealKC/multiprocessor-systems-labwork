@@ -6,53 +6,53 @@
 #define MBOX_READ_REG(MboxIfBaseAddr) ((u32 volatile*)((MboxIfBaseAddr) + 0x8))
 #define MBOX_WRITE_REG(MboxIfBaseAddr) ((u32 volatile*)((MboxIfBaseAddr) + 0x0))
 
-int MboxIsEmpty(u32 MboxIfBaseAddr)
+u32 MboxIsEmpty(u32 mboxIfBaseAddr)
 {
-    u32 status = *MBOX_STATUS_REG(MboxIfBaseAddr);
+    u32 status = *MBOX_STATUS_REG(mboxIfBaseAddr);
 
     return status & 0x1;
 }
 
-int MboxIsFull(u32 MboxIfBaseAddr)
+u32 MboxIsFull(u32 mboxIfBaseAddr)
 {
-    u32 status = *MBOX_STATUS_REG(MboxIfBaseAddr);
+    u32 status = *MBOX_STATUS_REG(mboxIfBaseAddr);
 
     return (status & 0x2) >> 1;
 }
 
-int MboxFlushReceive(u32 MboxIfBaseAddr)
+void MboxFlushReceive(u32 mboxIfBaseAddr)
 {
-    *MBOX_CTRL_REG(MboxIfBaseAddr) = 0x2;
+    *MBOX_CTRL_REG(mboxIfBaseAddr) = 0x2;
 }
 
-void MboxFlushTransmit(u32 MboxIfBaseAddr)
+void MboxFlushWrite(u32 mboxIfBaseAddr)
 {
-    *MBOX_CTRL_REG(MboxIfBaseAddr) = 0x1;
+    *MBOX_CTRL_REG(mboxIfBaseAddr) = 0x1;
 }
 
-void MboxReadBlocking(u32 MboxIfBaseAddr, u32* destDataPtr, u32 dataLen)
+void MboxReadBlocking(u32 mboxIfBaseAddr, u32* destDataPtr, u32 dataLen)
 {
     u32 read = 0;
 
     while (read < dataLen) {
-        while (MboxIsEmpty(MboxIfBaseAddr)) {
+        while (MboxIsEmpty(mboxIfBaseAddr)) {
             /* wait for data */;
         }
 
-        destDataPtr[read] = *MBOX_READ_REG(MboxIfBaseAddr);
+        destDataPtr[read] = *MBOX_READ_REG(mboxIfBaseAddr);
         read++;
     }
 }
 
-void MboxWriteBlocking(u32 MboxIfBaseAddr, u32* srcDataPtr, u32 dataLen)
+void MboxWriteBlocking(u32 mboxIfBaseAddr, u32* srcDataPtr, u32 dataLen)
 {
     int i = 0;
 
     for (i = 0; i < dataLen; ++i) {
-        while (MboxIsFull(MboxIfBaseAddr)) {
+        while (MboxIsFull(mboxIfBaseAddr)) {
             /* wait for space in the mailbox */;
         }
 
-        *MBOX_WRITE_REG(MboxIfBaseAddr) = srcDataPtr[i];
+        *MBOX_WRITE_REG(mboxIfBaseAddr) = srcDataPtr[i];
     }
 }
