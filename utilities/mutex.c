@@ -1,4 +1,4 @@
-#include "xil_types.h"
+#include "utilities.h"
 
 void MutexLock(u32 mutexBaseAddr, u32 mutexNumber, u32 cpuId)
 {

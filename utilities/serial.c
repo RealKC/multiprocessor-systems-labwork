@@ -1,4 +1,4 @@
-#include "xil_types.h"
+#include "utilities.h"
 
 u32 UartGetStatus(u32 uartBaseAddr)
 {

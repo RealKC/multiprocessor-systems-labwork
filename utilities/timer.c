@@ -1,4 +1,4 @@
-#include "xil_types.h"
+#include "utilities.h"
 
 void TimerSetLoadReg(u32 timerBaseAddr, u32 timerNumber, u32 loadValue)
 {

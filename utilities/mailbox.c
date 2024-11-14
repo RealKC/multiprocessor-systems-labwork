@@ -1,5 +1,4 @@
-#include "xil_types.h"
-#include "xparameters.h"
+#include "utilities.h"
 
 #define MBOX_STATUS_REG(MboxIfBaseAddr) ((u32 volatile*)((MboxIfBaseAddr) + 0x10))
 #define MBOX_CTRL_REG(MboxIfBaseAddr) ((u32 volatile*)((MboxIfBaseAddr) + 0x2c))

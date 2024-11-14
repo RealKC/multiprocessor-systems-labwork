@@ -1,4 +1,4 @@
-#include "xil_types.h"
+#include "utilities.h"
 
 // Adapted from "The C Programming language", 2nd ed., p 104, Kernighan and Ritchie
 int mystrcmp(u8 const* s, u8 const* t)
