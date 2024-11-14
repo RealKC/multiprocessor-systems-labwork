@@ -36,4 +36,7 @@ u32 TimerGetCounter(u32 timerBaseAddr, u32 timerNumber);
 int mystrcmp(u8 const* s, u8 const* t);
 int mystrlen(u8 const* s);
 
+// PRNG
+u32 xorshift32(u32 x);
+
 #endif
