@@ -12,7 +12,7 @@ void UartTransmitBlocking(u32 uartBaseAddr, u8 const* srcDataPtr, u32 dataLen)
     u8 volatile* tx = (u8 volatile*)(uartBaseAddr + 0x04);
 
     for (i = 0; i < dataLen; ++i) {
-        while (!(UartGetStatus(uartBaseAddr) & (0x1 << 4))) {
+        while ((UartGetStatus(uartBaseAddr) & 0x8)) {
             ; // block to wait for space in the queue
         }
 
