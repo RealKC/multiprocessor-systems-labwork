@@ -2,7 +2,7 @@
 
 u32 UartGetStatus(u32 uartBaseAddr)
 {
-    return *(u32 volatile)(uartBaseAddr + 0x08);
+    return *(u32 volatile*)(uartBaseAddr + 0x08);
 }
 
 void UartTransmitBlocking(u32 uartBaseAddr, u8 const* srcDataPtr, u32 dataLen)
