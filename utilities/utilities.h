@@ -1,6 +1,7 @@
 #ifndef KC_UTILITIES_H
 #define KC_UTILITIES_H
 
+#include "xil_exception.h"
 #include "xil_printf.h"
 #include "xil_types.h"
 #include "xparameters.h"
@@ -39,4 +40,10 @@ int mystrlen(u8 const* s);
 // PRNG
 u32 xorshift32(u32 x);
 
+// Interrupts
+void EnableInterrupt(u32 intcBaseAddr, u32 interruptVector);
+void DisableInterrupt(u32 intcBaseAddr, u32 interruptVector);
+void AcknowledgeInterrupt(u32 intcBaseAddr, u32 interruptVector);
+u32 GetPrioIntr(u32 intcBaseAddr);
+void SendSoftwareInterrupt(u32 destIntcBaseAddr, u32 interruptVector);
 #endif
