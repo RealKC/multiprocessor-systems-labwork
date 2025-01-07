@@ -32,7 +32,7 @@ u16 UartReceiveBlocking(u32 uartBaseAddr, u8* destDataPtr, u32 dataLen)
             ; // block to wait for a character
         }
 
-        read_buf[i] = *rx;
+        destDataPtr[i] = *rx;
         i++;
     }
 
