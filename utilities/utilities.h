@@ -46,4 +46,18 @@ void DisableInterrupt(u32 intcBaseAddr, u32 interruptVector);
 void AcknowledgeInterrupt(u32 intcBaseAddr, u32 interruptVector);
 u32 GetPrioIntr(u32 intcBaseAddr);
 void SendSoftwareInterrupt(u32 destIntcBaseAddr, u32 interruptVector);
+
+// GPIO / LEDs
+void InitLeds(void);
+void SetLeds(u32 newLedVal);
+void SetLed(u32 ledNumber, u32 newLedVal);
+void Init7Seg(void);
+u32 HexToCat(u32 valToTranslate);
+void DisplayHex7Seg(u32 numToDisplay);
+
+// Should be called in response to a timer interrupt at a frequency from 1kHz to 60Hz (62.5Hz -> 16ms period)
+void Write7SegToGPIO(void);
+
+extern u32 currentlyShownDigits[];
+
 #endif
